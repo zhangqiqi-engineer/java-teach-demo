@@ -1,0 +1,35 @@
+# ============================================================
+# Spring Boot 应用配置（教学项目）
+# 修改数据库账号密码后即可启动
+# ============================================================
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: java-teach-demo
+  datasource:
+    # 请按本机 MySQL 实际情况修改
+    url: jdbc:mysql://127.0.0.1:3306/teach_demo?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: Root@123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# MyBatis 配置
+mybatis:
+  # Mapper XML 位置
+  mapper-locations: classpath:mapper/*.xml
+  # 实体类别名包（XML 中可写短类名，本项目用全限定名也行）
+  type-aliases-package: com.example.teach.entity
+  configuration:
+    # 下划线列名自动转驼峰属性名（student_no -> studentNo）
+    map-underscore-to-camel-case: true
+    # 开发时可打开 SQL 日志，方便学习
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志级别（教学时可看到更清晰的请求日志）
+logging:
+  level:
+    com.example.teach: debug
+    org.springframework.web: info

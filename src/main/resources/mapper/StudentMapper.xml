@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  namespace 必须与 Mapper 接口全限定名一致
+  每个 SQL 的 id 对应接口中的方法名
+-->
+<mapper namespace="com.example.teach.mapper.StudentMapper">
+
+    <!-- resultMap：列名 → 属性名的显式映射（教学演示；开启驼峰映射后也可省略） -->
+    <resultMap id="StudentMap" type="com.example.teach.entity.Student">
+        <id     property="id"         column="id"/>
+        <result property="studentNo"  column="student_no"/>
+        <result property="name"       column="name"/>
+        <result property="gender"     column="gender"/>
+        <result property="age"        column="age"/>
+        <result property="className"  column="class_name"/>
+        <result property="phone"      column="phone"/>
+        <result property="remark"     column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 可复用的查询条件片段（动态 SQL） -->
+    <sql id="QueryWhere">
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="studentNo != null and studentNo != ''">
+                AND student_no LIKE CONCAT('%', #{studentNo}, '%')
+            </if>
+            <if test="className != null and className != ''">
+                AND class_name LIKE CONCAT('%', #{className}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectById" resultMap="StudentMap">
+        SELECT *
+        FROM t_student
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByStudentNo" resultMap="StudentMap">
+        SELECT *
+        FROM t_student
+        WHERE student_no = #{studentNo}
+        LIMIT 1
+    </select>
+
+    <select id="selectPage" resultMap="StudentMap">
+        SELECT *
+        FROM t_student
+        <include refid="QueryWhere"/>
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countPage" resultType="long">
+        SELECT COUNT(1)
+        FROM t_student
+        <include refid="QueryWhere"/>
+    </select>
+
+    <!-- useGeneratedKeys：把自增主键回填到实体的 id 属性 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_student (
+            student_no, name, gender, age, class_name, phone, remark
+        ) VALUES (
+            #{studentNo}, #{name}, #{gender}, #{age}, #{className}, #{phone}, #{remark}
+        )
+    </insert>
+
+    <update id="updateById">
+        UPDATE t_student
+        <set>
+            <if test="studentNo != null">student_no = #{studentNo},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM t_student WHERE id = #{id}
+    </delete>
+
+</mapper>

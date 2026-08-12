@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.teach.mapper.UserMapper">
+    <select id="selectByUsername" resultType="com.example.teach.entity.User">
+        select id,username,password from sys_user where username = #{username}
+    </select>
+    <insert id="insert">
+        insert into sys_user(username,password) values(#{username},#{password})
+    </insert>
+</mapper>

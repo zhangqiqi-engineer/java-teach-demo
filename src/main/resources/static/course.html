@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课程管理</title>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">Teach</span>
+      <span class="brand-sub">Java 教学演示</span>
+    </div>
+    <nav class="nav">
+      <a class="nav-item" href="index.html">学生管理</a>
+      <a class="nav-item active" href="#">课程管理</a>
+    </nav>
+    <div class="sidebar-foot">
+      <p>Spring Boot 3.5 + MyBatis</p>
+      <p>JDK 17 · Gradle</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="content-wrap">
+      <header class="page-header">
+        <div>
+          <h1>课程管理</h1>
+          <p class="page-desc">演示课程增删改查与条件查询</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="addBtn">新增课程</button>
+      </header>
+
+      <!-- 搜索工具栏 -->
+      <section class="toolbar">
+        <div class="filters">
+          <input type="text" id="qCourseName" placeholder="课程名称" />
+          <input type="text" id="qTeacher" placeholder="授课老师" />
+          <button type="button" class="btn btn-secondary" id="btnSearch">查询</button>
+          <button type="button" class="btn btn-ghost" id="btnReset">重置</button>
+        </div>
+      </section>
+
+      <div class="tip" id="tip"></div>
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>课程名称</th>
+          <th>授课老师</th>
+          <th>学分</th>
+          <th>课时</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- JS渲染课程列表 -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- 弹窗：新增/编辑课程 -->
+<div class="modal-mask" id="mask" hidden>
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">新增课程</h3>
+      <button type="button" class="icon-btn" id="closeMask">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-item">
+        <label>课程名称</label>
+        <input type="text" id="courseName">
+      </div>
+      <div class="form-item">
+        <label>授课老师</label>
+        <input type="text" id="teacher">
+      </div>
+      <div class="form-item">
+        <label>学分</label>
+        <input type="number" id="credit">
+      </div>
+      <div class="form-item">
+        <label>课时</label>
+        <input type="number" id="hours">
+      </div>
+      <input type="hidden" id="editId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="cancelBtn">取消</button>
+      <button class="btn btn-primary" id="saveBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/course.js"></script>
+</body>
+</html>

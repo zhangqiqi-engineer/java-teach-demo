@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>登录 - 学生管理系统</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<div class="auth-box">
+    <h2>学生管理系统登录</h2>
+    <div class="form-item">
+        <label>用户名</label>
+        <input type="text" id="username" placeholder="请输入用户名">
+    </div>
+    <div class="form-item">
+        <label>密码</label>
+        <input type="password" id="password" placeholder="请输入密码">
+    </div>
+    <div class="btn-group">
+        <button id="loginBtn">登录</button>
+    </div>
+    <div class="tip">
+        没有账号？<a href="/register.html">去注册</a>
+    </div>
+    <div id="msg" class="msg"></div>
+</div>
+<script src="/js/auth.js"></script>
+</body>
+</html>

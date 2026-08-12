@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# 日志与临时文件
+logs/
+*.log
+*.tmp
+*.bak
+
+# 本地配置（如含密码可放这里，勿提交）
+# src/main/resources/application-local.yml
