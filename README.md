@@ -189,3 +189,4 @@ A: 安装 Lombok 插件，并开启 Annotation Processing。
 
 本项目刻意保持简单：无权限体系、无复杂前端框架，目的是让新人看清 Spring Boot + MyBatis 的主干。  
 生产环境请补齐安全、审计、连接池调优、统一日志与更完善的测试。
+# java-teach-demo
