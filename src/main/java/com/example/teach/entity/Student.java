@@ -45,4 +45,6 @@ public class Student {
 
     /** 更新时间 */
     private LocalDateTime updateTime;
+
+    private String courseNames;
 }

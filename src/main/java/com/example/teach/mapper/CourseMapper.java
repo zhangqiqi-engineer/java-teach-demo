@@ -24,4 +24,9 @@ public interface CourseMapper {
 
     // 删除课程
     int deleteById(Long id);
+
+    // 根据课程名称+老师查询是否已存在
+    Course selectByNameAndTeacher(@Param("courseName") String courseName,
+                                  @Param("teacher") String teacher);
+
 }

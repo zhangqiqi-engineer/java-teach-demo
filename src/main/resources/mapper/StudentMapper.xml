@@ -20,6 +20,8 @@
         <result property="remark"     column="remark"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <!--新增：sql别名course_names映射到实体courseNames-->
+        <result property="courseNames" column="course_names"/>
     </resultMap>
 
     <!-- 可复用的查询条件片段（动态 SQL） -->
@@ -51,10 +53,17 @@
     </select>
 
     <select id="selectPage" resultMap="StudentMap">
-        SELECT *
-        FROM t_student
+        SELECT
+        s.*,
+        GROUP_CONCAT(c.course_name SEPARATOR ',') AS course_names
+        FROM t_student s
+        LEFT JOIN stu_course_rel r ON s.id = r.student_id
+        LEFT JOIN course c ON r.course_id = c.id
+
         <include refid="QueryWhere"/>
-        ORDER BY id DESC
+
+        GROUP BY s.id
+        ORDER BY s.id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select>
 

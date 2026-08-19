@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.teach.mapper.StuCourseRelMapper">
+
+    <delete id="deleteByStudentId">
+        DELETE FROM stu_course_rel WHERE student_id = #{studentId}
+    </delete>
+
+    <insert id="batchInsert">
+        INSERT INTO stu_course_rel(student_id, course_id)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.studentId}, #{item.courseId})
+        </foreach>
+    </insert>
+
+    <select id="selectCourseIdsByStudentId" resultType="java.lang.Long">
+        SELECT course_id FROM stu_course_rel WHERE student_id = #{studentId}
+    </select>
+
+    <select id="selectCourseByStudentId" resultType="com.example.teach.entity.Course">
+        SELECT c.*
+        FROM stu_course_rel r
+                 LEFT JOIN course c ON r.course_id = c.id
+        WHERE r.student_id = #{studentId}
+    </select>
+
+</mapper>

@@ -41,4 +41,13 @@
             </if>
         </where>
     </select>
+
+    <select id="selectByNameAndTeacher" resultType="com.example.teach.entity.Course">
+        select id, course_name, teacher, credit, hours
+        from course
+        where course_name = #{courseName}
+        and teacher = #{teacher}
+        limit 1
+    </select>
+
 </mapper>

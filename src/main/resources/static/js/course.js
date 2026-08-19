@@ -15,6 +15,11 @@ const qTeacherDom = document.getElementById('qTeacher');
 const btnSearch = document.getElementById('btnSearch');
 const btnReset = document.getElementById('btnReset');
 
+//导入导出DOM
+const btnExport = document.getElementById('btnExport');
+const btnImport = document.getElementById('btnImport');
+const fileInput = document.getElementById('fileInput');
+
 
 // 加载课程列表，支持条件搜索
 async function loadCourseList() {
@@ -155,6 +160,52 @@ btnReset.onclick = function (){
     qTeacherDom.value = '';
     loadCourseList();
 }
+
+// ============ 导出Excel功能 ============
+btnExport.onclick = async function(){
+    tipDom.innerText = "正在导出...";
+    //后端返回二进制文件流
+    const res = await fetch("/api/course/export");
+    if(!res.ok){
+        tipDom.innerText = "导出失败";
+        return;
+    }
+    const blob = await res.blob();
+    const downloadUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = "课程数据.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(downloadUrl);
+    tipDom.innerText = "导出完成";
+}
+
+// ============ 导入Excel功能 ============
+//点击导入按钮唤起文件选择
+btnImport.onclick = function(){
+    fileInput.value = "";
+    fileInput.click();
+}
+//监听文件选中
+fileInput.onchange = async function(){
+    const file = fileInput.files[0];
+    if(!file) return;
+    tipDom.innerText = "正在上传导入...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/course/import",{
+        method:"POST",
+        body: formData
+    });
+    const json = await res.json();
+    tipDom.innerText = json.code===200 ? "导入成功" : json.message;
+    loadCourseList();
+}
+
 
 //页面初始化加载列表
 loadCourseList();
