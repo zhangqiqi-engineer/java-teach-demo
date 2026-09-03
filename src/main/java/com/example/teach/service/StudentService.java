@@ -4,6 +4,9 @@ import com.example.teach.common.PageResult;
 import com.example.teach.dto.StudentQuery;
 import com.example.teach.dto.StudentRequest;
 import com.example.teach.entity.Student;
+import com.example.teach.entity.Course;
+import com.example.teach.dto.StuCourseRelSaveDTO;
+import java.util.List;
 
 /**
  * 学生业务接口
@@ -23,4 +26,11 @@ public interface StudentService {
     void update(Long id, StudentRequest request);
 
     void delete(Long id);
+
+    // ============新增：学生选课关联方法============
+    void saveStudentCourseRel(StuCourseRelSaveDTO dto);
+
+    List<Long> getSelectedCourseIds(Long studentId);
+
+    List<Course> getStudentBindCourse(Long studentId);
 }

@@ -2,13 +2,17 @@ package com.example.teach.controller;
 
 import com.example.teach.common.ApiResult;
 import com.example.teach.common.PageResult;
+import com.example.teach.dto.StuCourseRelSaveDTO;
 import com.example.teach.dto.StudentQuery;
 import com.example.teach.dto.StudentRequest;
+import com.example.teach.entity.Course;
 import com.example.teach.entity.Student;
 import com.example.teach.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 学生管理接口
@@ -65,4 +69,37 @@ public class StudentController {
         studentService.delete(id);
         return ApiResult.ok();
     }
+
+    // ====================== 新增：学生‑课程绑定三个接口 ======================
+
+    /**
+     * 保存学生课程绑定关系
+     * POST /api/students/saveCourseRel
+     */
+    @PostMapping("/saveCourseRel")
+    public ApiResult<Void> saveCourseRel(@Valid @RequestBody StuCourseRelSaveDTO dto) {
+        studentService.saveStudentCourseRel(dto);
+        return ApiResult.ok();
+    }
+
+    /**
+     * 获取学生已选课程ID集合，用于前端多选框回显
+     * GET /api/students/courseIds?studentId=xxx
+     */
+    @GetMapping("/courseIds")
+    public ApiResult<List<Long>> getSelectedCourseIds(@RequestParam Long studentId) {
+        List<Long> idList = studentService.getSelectedCourseIds(studentId);
+        return ApiResult.ok(idList);
+    }
+
+    /**
+     * 获取学生绑定完整课程信息
+     * GET /api/students/courses?studentId=xxx
+     */
+    @GetMapping("/courses")
+    public ApiResult<List<Course>> getStudentCourses(@RequestParam Long studentId) {
+        List<Course> list = studentService.getStudentBindCourse(studentId);
+        return ApiResult.ok(list);
+    }
+
 }

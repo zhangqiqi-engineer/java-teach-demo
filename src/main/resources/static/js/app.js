@@ -5,7 +5,6 @@
  */
 
 const API = '/api/students';
-const API_COURSE_REL = '/api/stuCourseRel';
 let allCourseList = [];
 
 const state = {
@@ -166,7 +165,7 @@ function getCheckedCourseIds() {
 //保存学生课程绑定
 async function saveStudentCourseRel(studentId) {
   const ids = getCheckedCourseIds();
-  await request(`${API_COURSE_REL}/save`, {
+  await request(`${API}/saveCourseRel`, {
     method: "POST",
     body: JSON.stringify({
       studentId: studentId,
@@ -193,7 +192,7 @@ function openModal(title, student) {
   } else {
     (async () => {
       try {
-        const selectedIds = await request(`${API_COURSE_REL}/courseIds?studentId=${student.id}`);
+        const selectedIds = await request(`${API}/courseIds?studentId=${student.id}`);
         renderCourseCheckbox(selectedIds);
       } catch (e) {
         renderCourseCheckbox([]);

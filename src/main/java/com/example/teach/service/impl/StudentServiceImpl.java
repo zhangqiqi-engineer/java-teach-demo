@@ -2,9 +2,13 @@ package com.example.teach.service.impl;
 
 import com.example.teach.common.BizException;
 import com.example.teach.common.PageResult;
+import com.example.teach.dto.StuCourseRelSaveDTO;
 import com.example.teach.dto.StudentQuery;
 import com.example.teach.dto.StudentRequest;
+import com.example.teach.entity.Course;
+import com.example.teach.entity.StuCourseRel;
 import com.example.teach.entity.Student;
+import com.example.teach.mapper.StuCourseRelMapper;
 import com.example.teach.mapper.StudentMapper;
 import com.example.teach.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +30,8 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentMapper studentMapper;
+    // 新增：注入学生课程中间表mapper，构造器注入，final
+    private final StuCourseRelMapper stuCourseRelMapper;
 
     @Override
     public PageResult<Student> page(StudentQuery query) {
@@ -80,7 +87,46 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        // 校验学生是否存在
         getById(id);
+        // 【新增】删除学生同时，删除该学生所有选课关联，防止脏数据
+        stuCourseRelMapper.deleteByStudentId(id);
         studentMapper.deleteById(id);
+    }
+
+    // ============ 新增：学生‑课程绑定业务方法 ============
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveStudentCourseRel(StuCourseRelSaveDTO dto) {
+        Long studentId = dto.getStudentId();
+        List<Long> courseIdList = dto.getCourseIdList();
+
+        // 删除该学生旧的全部绑定关系
+        stuCourseRelMapper.deleteByStudentId(studentId);
+
+        // 如果没有选择任何课程，直接结束
+        if (courseIdList == null || courseIdList.isEmpty()) {
+            return;
+        }
+
+        // 组装中间表实体，批量插入
+        List<StuCourseRel> relList = new ArrayList<>();
+        for (Long cid : courseIdList) {
+            StuCourseRel rel = new StuCourseRel();
+            rel.setStudentId(studentId);
+            rel.setCourseId(cid);
+            relList.add(rel);
+        }
+        stuCourseRelMapper.batchInsert(relList);
+    }
+
+    @Override
+    public List<Long> getSelectedCourseIds(Long studentId) {
+        return stuCourseRelMapper.selectCourseIdsByStudentId(studentId);
+    }
+
+    @Override
+    public List<Course> getStudentBindCourse(Long studentId) {
+        return stuCourseRelMapper.selectCourseByStudentId(studentId);
     }
 }
